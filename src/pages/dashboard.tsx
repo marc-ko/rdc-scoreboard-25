@@ -16,6 +16,7 @@ import * as Y from "yjs";
 import Teams from "../props/dashboard/teams.json";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
+import { AppealTimer } from './appealTimer';
 
 
 export default function Dashboard(props: any) {
@@ -73,6 +74,7 @@ export default function Dashboard(props: any) {
     const isFirstReadSettings = useRef(false);
     const [gameSettingsModal, setGameSettingsModal] = useState(false);
     const [gameSettings, setGameSettings] = useState({ preGameCountdown: true, endGameCountdown: true, bgm: false });
+    const [appealTimerModal, setAppealTimerModal] = useState(false);
 
     useEffect(() => {
         const localGameSettings = localStorage.getItem("gameSettings");
@@ -808,7 +810,7 @@ export default function Dashboard(props: any) {
                 }}>
                     <Button onClick={() => { setGameSettingsModal(true) }} colorScheme="teal" size={"sm"}>Game Settings</Button>
                     <br />
-                    <Button onClick={() => { }} colorScheme="teal" size={"sm"}>Appeal Timer</Button>
+                    <Button onClick={() => { setAppealTimerModal(true) }} colorScheme="teal" size={"sm"}>Appeal Timer</Button>
                     {/* <Button onClick={() => { setPatternRandomGeneratorModal(true) }} colorScheme="teal" size={"sm"}>Pattern Generator</Button> */}
                 </Box>
                 <Box style={{
@@ -1045,6 +1047,17 @@ export default function Dashboard(props: any) {
                     <ModalFooter>
                         {props.buildVersion ? <Text fontSize={"0.75rem"}>Version: {(props.buildVersion as string).substring(0, 6)}</Text> : <Text fontSize={"0.75rem"}>Version: Development</Text>}
                     </ModalFooter>
+                </ModalContent>
+            </Modal>
+
+            <Modal isOpen={appealTimerModal} onClose={() => { setAppealTimerModal(false) }} size="full">
+                <ModalOverlay />
+                <ModalContent backgroundColor="#3A3B3C" color="white" maxW="100vw" maxH="100vh" m={0}>
+                    <ModalHeader>Appeal Timer</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody p={0} display="flex" alignItems="center" justifyContent="center" minH="calc(100vh - 60px)">
+                        <AppealTimer onClose={() => setAppealTimerModal(false)} />
+                    </ModalBody>
                 </ModalContent>
             </Modal>
         </>
