@@ -4,18 +4,18 @@ export default function HistoryList(props: any) {
 
     return (
         <Flex>
-            
+
             <Box
                 shadow="lg"
                 rounded="md"
                 style={{
-                    fontSize: "2rem",
+                    fontSize: "1.5rem",
                     textAlign: "center",
-                    lineHeight: "2.5rem",
+                    lineHeight: "2rem",
                     backgroundColor: "white",
                     color: "black",
-                    width: "23.5rem",
-                    height: "18rem",
+                    width: "20.1rem",
+                    height: "12rem",
                     overflow: "hidden",
                 }}
             >
@@ -49,8 +49,8 @@ export default function HistoryList(props: any) {
                             })}
                             {props.history.filter((item: any) => item.team === props.team).length >= 8 && (
                                 <>
-                                <Tr><Td></Td></Tr>
-                                <Tr><Td></Td></Tr>
+                                    <Tr><Td></Td></Tr>
+                                    <Tr><Td></Td></Tr>
                                 </>
                             )}
                         </Tbody>
