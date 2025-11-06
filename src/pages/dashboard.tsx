@@ -361,7 +361,7 @@ export default function Dashboard(props: any) {
     if (gameProps.get("init") == undefined) {
         console.log("Initializing GameProps Data")
         ydoc.transact((_y) => {
-            gameProps.set("teams", { "redTeam": { "cname": "征龍", "ename": "War Dragon" }, "blueTeam": { "cname": "火之龍", "ename": "Fiery Dragon" }, "greenTeam": { "cname": "綠之龍", "ename": "Green Dragon" }, "yellowTeam": { "cname": "黃之龍", "ename": "Yellow Dragon" } })
+            gameProps.set("teams", { "redTeam": { "cname": "征龍", "ename": "War Dragon" }, "blueTeam": { "cname": "火之龍", "ename": "Fiery Dragon" }, "greenTeam": { "cname": "東京大学", "ename": "RoboTech" }, "yellowTeam": { "cname": "植搗黃農", "ename": "Golden Farmer" } })
 
             const gameHistory = new Y.Array();
             gameProps.set("history", gameHistory)
@@ -401,8 +401,8 @@ export default function Dashboard(props: any) {
     const [teamState, setTeamState] = useState<{ redTeam: { cname: string; ename: string; }; blueTeam: { cname: string; ename: string; }; greenTeam: { cname: string; ename: string; }; yellowTeam: { cname: string; ename: string; }; }>({
         redTeam: { cname: "征龍", ename: "War Dragon" },
         blueTeam: { cname: "火之龍", ename: "Fiery Dragon" },
-        greenTeam: { cname: "綠之龍", ename: "Green Dragon" },
-        yellowTeam: { cname: "黃之龍", ename: "Yellow Dragon" }
+        greenTeam: { cname: "東京大学", ename: "RoboTech" },
+        yellowTeam: { cname: "植搗黃農", ename: "Golden Farmer" }
     });
 
     // GameProps Main Scoring Function
@@ -553,8 +553,8 @@ export default function Dashboard(props: any) {
         const defaultTeams = {
             redTeam: { cname: "征龍", ename: "War Dragon" },
             blueTeam: { cname: "火之龍", ename: "Fiery Dragon" },
-            greenTeam: { cname: "綠之龍", ename: "Green Dragon" },
-            yellowTeam: { cname: "黃之龍", ename: "Yellow Dragon" }
+            greenTeam: { cname: "東京大学", ename: "RoboTech" },
+            yellowTeam: { cname: "植搗黃農", ename: "Golden Farmer" }
         };
 
         setTeamState({
@@ -727,7 +727,7 @@ export default function Dashboard(props: any) {
             clockData.set("paused", true)
             clockData.set("init", true)
 
-            gameProps.set("teams", { "redTeam": { "cname": "征龍", "ename": "War Dragon" }, "blueTeam": { "cname": "火之龍", "ename": "Fiery Dragon" }, "greenTeam": { "cname": "綠之龍", "ename": "Green Dragon" }, "yellowTeam": { "cname": "黃之龍", "ename": "Yellow Dragon" } })
+            gameProps.set("teams", { "redTeam": { "cname": "征龍", "ename": "War Dragon" }, "blueTeam": { "cname": "火之龍", "ename": "Fiery Dragon" }, "greenTeam": { "cname": "東京大学", "ename": "RoboTech" }, "yellowTeam": { "cname": "植搗黃農", "ename": "Golden Farmer" } })
 
             const gameHistory = new Y.Array();
             gameProps.set("history", gameHistory)
@@ -783,14 +783,31 @@ export default function Dashboard(props: any) {
                     margin: '1rem',
                     zIndex: 10
                 }}>
-                    GameID: {gameID}
-                    <br />
-                    <Button onClick={() => { navigator.clipboard.writeText(gameID).then(() => toast({ title: "GameID Copied!", status: "success", duration: 1000 })) }} colorScheme="blue" size={"sm"}>Copy GameID</Button>
-                    <br />
-                    <Button onClick={() => { navigator.clipboard.writeText(JSON.stringify(gameProps.toJSON())).then(() => toast({ title: "GameProps Copied!", status: "success", duration: 1000 })) }} colorScheme="blue" size={"sm"}>Copy Game Props</Button>
-                    <br />
-                    <Button onClick={() => { forceReset(); toast.closeAll(); toast({ title: "Props Reset!", status: "success", duration: 1000 }) }} colorScheme="red" size={"sm"}>Force Reset</Button>
-
+                    <Flex >
+                        <Text mr="0.3rem" userSelect="none">{"GameID:"}</Text>
+                        <Text
+                            cursor="pointer"
+                            textShadow="0 0 10px white"
+                            color="transparent"
+                            _hover={{ textShadow: "none", color: "white" }}
+                            onClick={() => {
+                                navigator.clipboard.writeText(gameID).then(() =>
+                                    toast({ title: "GameID Copied!", status: "success", duration: 1000 })
+                                );
+                            }}
+                        >
+                            {gameID}
+                        </Text>
+                    </Flex>
+                    <Flex>
+                        <Button onClick={() => { navigator.clipboard.writeText(gameID).then(() => toast({ title: "GameID Copied!", status: "success", duration: 1000 })) }} colorScheme="blue" size={"sm"}>Copy GameID</Button>
+                    </Flex>
+                    <Flex>
+                        <Button onClick={() => { navigator.clipboard.writeText(JSON.stringify(gameProps.toJSON())).then(() => toast({ title: "GameProps Copied!", status: "success", duration: 1000 })) }} colorScheme="blue" size={"sm"}>Copy Game Props</Button>
+                    </Flex>
+                    <Flex>
+                        <Button onClick={() => { forceReset(); toast.closeAll(); toast({ title: "Props Reset!", status: "success", duration: 1000 }) }} colorScheme="red" size={"sm"}>Force Reset</Button>
+                    </Flex>
                 </Box>
                 <Box style={{
                     fontSize: '1rem',
