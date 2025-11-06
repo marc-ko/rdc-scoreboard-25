@@ -9,10 +9,14 @@ export default function AppealTimer({ onClose }: { onClose?: () => void }) {
     const [isRunning, setIsRunning] = useState(false);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const countdownAudioRef = useRef<HTMLAudioElement | null>(null);
+    const appealStartAudioRef = useRef<HTMLAudioElement | null>(null);
+    const appealEndAudioRef = useRef<HTMLAudioElement | null>(null);
 
     // Initialize audio
     useEffect(() => {
         countdownAudioRef.current = new Audio("/sound/countdown.mp3");
+        appealStartAudioRef.current = new Audio("/sound/appealStart.mp3");
+        appealEndAudioRef.current = new Audio("/sound/appealEnd.mp3");
         return () => {
             if (countdownAudioRef.current) {
                 countdownAudioRef.current.pause();
@@ -39,6 +43,11 @@ export default function AppealTimer({ onClose }: { onClose?: () => void }) {
 
                     if (newTime <= 0) {
                         setIsRunning(false);
+                        if (appealEndAudioRef.current) {
+                            appealEndAudioRef.current.play().catch(() => {
+                                // Ignore autoplay errors
+                            });
+                        }
                         return 0;
                     }
 
@@ -60,6 +69,11 @@ export default function AppealTimer({ onClose }: { onClose?: () => void }) {
     }, [isRunning, timeLeft]);
 
     const startTimer = () => {
+        if (appealStartAudioRef.current) {
+            appealStartAudioRef.current.play().catch(() => {
+                // Ignore autoplay errors   
+            });
+        }
         setTimeLeft(60);
         setIsRunning(true);
     };
