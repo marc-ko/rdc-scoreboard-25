@@ -16,7 +16,7 @@ import * as Y from "yjs";
 import Teams from "../props/dashboard/teams.json";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
-import { AppealTimer } from './appealTimer';
+import { AppealTimer } from '../props/dashboard/appealTimer';
 
 
 export default function Dashboard(props: any) {
