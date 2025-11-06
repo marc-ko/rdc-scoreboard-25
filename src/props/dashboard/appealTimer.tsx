@@ -4,7 +4,7 @@ import { Box, Button, Text } from "@chakra-ui/react";
 import "@fontsource-variable/quicksand";
 import { useEffect, useRef, useState } from "react";
 
-export function AppealTimer({ onClose }: { onClose?: () => void }) {
+export default function AppealTimer({ onClose }: { onClose?: () => void }) {
     const [timeLeft, setTimeLeft] = useState(60); // 60 seconds
     const [isRunning, setIsRunning] = useState(false);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);

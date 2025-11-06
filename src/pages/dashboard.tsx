@@ -11,12 +11,12 @@ import { YJsClient } from "@/yjsClient/yjsClient";
 import { Box, Button, Flex, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Switch, Text, useToast } from "@chakra-ui/react";
 import "@fontsource-variable/quicksand";
 import Head from 'next/head';
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Y from "yjs";
 import Teams from "../props/dashboard/teams.json";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
-import { AppealTimer } from '../props/dashboard/appealTimer';
+import AppealTimer from '../props/dashboard/appealTimer';
 
 
 export default function Dashboard(props: any) {
@@ -161,6 +161,7 @@ export default function Dashboard(props: any) {
             })
         }
     }, [clockData]);
+
     const [clockText, setClockText] = useState({ minutes: "00", seconds: "00", milliseconds: "000" });
     const [elapsedText, setElapsedText] = useState({ minutes: "00", seconds: "00", milliseconds: "000" });
 
