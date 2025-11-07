@@ -857,14 +857,20 @@ export default function Dashboard(props: any) {
                     position: 'absolute',
                 }}>
                     {/* Mobile: Vertical Layout for ScoreDisplay with Counters */}
-                    <Box display={{ base: 'flex', md: 'none' }} flexDirection="column" alignItems="center" gap="1.5rem" style={{
-                        position: 'absolute',
-                        top: '5%',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        zIndex: 10,
-                        width: '90%',
-                    }}>
+                    <Box
+                        display={{ base: 'flex', md: 'none' }}
+                        flexDirection="column"
+                        alignItems="center"
+                        gap="1.5rem"
+                        sx={{
+                            position: 'absolute',
+                            top: '1%',
+                            left: '50%',
+                            transform: { base: 'translateX(-50%)', md: 'translateY(50%) translateX(-50%)' },
+                            zIndex: 10,
+                            width: { base: '90%', md: 'auto' },
+                        }}
+                    >
                         {/* Red Team */}
                         <Box display="flex" flexDirection="column" alignItems="center" gap="0.5rem" width="100%">
                             <ScoreDisplay color={"red"} team={teamState.redTeam} editable={true} score={scores.redPoints} teams={Teams} setTeam={updateTeam} teamColor={"redTeam"} />
@@ -1018,7 +1024,7 @@ export default function Dashboard(props: any) {
                             width: '100%',
                             objectFit: 'contain',
                         }} sx={{
-                            transform: { base: 'scale(3)', md: 'scale(1)' },
+                            transform: { base: 'scale(1)', md: 'scale(1)', sm: 'scale(9)' },
                             transformOrigin: 'center',
                         }} />
                     </Box>
