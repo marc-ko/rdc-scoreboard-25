@@ -832,12 +832,17 @@ export default function Dashboard(props: any) {
                     <Button onClick={() => { setAppealTimerModal(true) }} colorScheme="teal" size={"sm"}>Appeal Timer</Button>
                     {/* <Button onClick={() => { setPatternRandomGeneratorModal(true) }} colorScheme="teal" size={"sm"}>Pattern Generator</Button> */}
                 </Box>
-                <Box style={{
-                    height: '0%',
-                    width: '100%',
-                    position: 'absolute',
-                    justifyContent: 'center',
-                }}>
+                <Box
+                    display={{ base: 'block', md: 'block' }}
+                    sx={{
+                        height: { base: 'auto', md: '0%' },
+                        width: '100%',
+                        top: { base: '5%', md: 'auto' },
+                        position: 'absolute',
+                        justifyContent: 'center',
+                        zIndex: { base: 20, md: 0 },
+                    }}
+                >
                     {/** Clock Box */}
                     <TimerBox
                         timeText={clockText}
@@ -1019,14 +1024,18 @@ export default function Dashboard(props: any) {
                         width: '100%',
                         zIndex: 1,
                     }}>
-                        <Image src="/GameField.webp" fallbackSrc="/GameField.png" alt="Logo" style={{
-                            height: '100%',
-                            width: '100%',
-                            objectFit: 'contain',
-                        }} sx={{
-                            transform: { base: 'scale(1)', md: 'scale(1)', sm: 'scale(9)' },
-                            transformOrigin: 'center',
-                        }} />
+                        <Image
+                            src="/GameField.webp"
+                            fallbackSrc="/GameField.png"
+                            alt="Logo"
+                            sx={{
+                                height: '100%',
+                                width: '100%',
+                                objectFit: 'contain',
+                                transform: { base: 'scale(5)', md: 'scale(1)' },
+                                transformOrigin: 'center',
+                            }}
+                        />
                     </Box>
 
                     {/* Desktop: CounterType - Red Storage Zone */}

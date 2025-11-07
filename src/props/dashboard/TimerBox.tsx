@@ -26,7 +26,14 @@ export default function TimerBox(props: any) {
                 fontFamily: "'Source Code Pro Variable', sans-serif",
                 fontWeight: "600",
             }}>
-                {time.minutes}:{time.seconds}.{time.milliseconds}
+                {/* Mobile: Show only minutes and seconds */}
+                <Box display={{ base: 'block', md: 'none' }}>
+                    {time.minutes}:{time.seconds}
+                </Box>
+                {/* Desktop: Show full time with milliseconds */}
+                <Box display={{ base: 'none', md: 'block' }}>
+                    {time.minutes}:{time.seconds}.{time.milliseconds}
+                </Box>
             </Box>
             <Box hidden={props.hidden} display={{ base: 'none', md: 'block' }} style={{
                 position: "relative",
