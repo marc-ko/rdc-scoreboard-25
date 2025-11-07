@@ -1020,7 +1020,6 @@ export default function Dashboard(props: any) {
                         }} sx={{
                             transform: { base: 'scale(3)', md: 'scale(1)' },
                             transformOrigin: 'center',
-                            backgroundColor: 'black'
                         }} />
                     </Box>
 
