@@ -766,18 +766,29 @@ export default function Dashboard(props: any) {
             <Head>
                 <title>{"HKUST RDC 2025"}</title>
             </Head>
-            <Box style={{
+            <Box sx={{
                 height: containerHeight,
                 position: 'absolute',
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'space-between',
-                //overflow: 'hidden',
-                backgroundColor: '#3A3B3C',
                 fontFamily: "'Quicksand Variable', sans-serif",
                 fontWeight: "700",
                 fontSize: "2rem",
                 color: 'white',
+                backgroundColor: '#3A3B3C',
+                overflow: {
+                    base: 'auto',
+                    md: 'hidden',
+                },
+                minHeight: {
+                    base: '100vh',
+                    md: 'auto',
+                },
+                minWidth: {
+                    base: '100vw',
+                    md: 'auto',
+                },
             }}>
                 <Box style={{
                     fontSize: '1.3rem',
@@ -867,13 +878,14 @@ export default function Dashboard(props: any) {
                         flexDirection="column"
                         alignItems="center"
                         gap="1.5rem"
-                        sx={{
+                        style={{
                             position: 'absolute',
                             top: '1%',
                             left: '50%',
-                            transform: { base: 'translateX(-50%)', md: 'translateY(50%) translateX(-50%)' },
+                            transform: 'translateX(-50%)',
                             zIndex: 10,
-                            width: { base: '90%', md: 'auto' },
+                            width: '90%',
+                            paddingBottom: '8rem',
                         }}
                     >
                         {/* Red Team */}
@@ -1011,15 +1023,15 @@ export default function Dashboard(props: any) {
 
                     {/* Blue Team History - Bottom Right */}
                     <Box display={{ base: 'none', md: 'block' }} style={{
-                        right: '5%',
+                        right: '8%',
                         top: '73%',
-                        width: '20%',
                         position: 'absolute',
                         zIndex: 10,
                     }}>
                         <HistoryList history={historyState} team="BLUE" color={"blue"} />
                     </Box>
-                    <Box style={{
+                    {/* Desktop: GameField Image */}
+                    <Box display={{ base: 'none', md: 'block' }} style={{
                         height: '95%',
                         width: '100%',
                         zIndex: 1,
@@ -1027,13 +1039,11 @@ export default function Dashboard(props: any) {
                         <Image
                             src="/GameField.webp"
                             fallbackSrc="/GameField.png"
-                            alt="Logo"
+                            alt="Game Field"
                             sx={{
                                 height: '100%',
                                 width: '100%',
                                 objectFit: 'contain',
-                                transform: { base: 'scale(5)', md: 'scale(1)' },
-                                transformOrigin: 'center',
                             }}
                         />
                     </Box>
