@@ -28,7 +28,7 @@ export default function TimerBox(props: any) {
             }}>
                 {time.minutes}:{time.seconds}.{time.milliseconds}
             </Box>
-            <Box hidden={props.hidden} style={{
+            <Box hidden={props.hidden} display={{ base: 'none', md: 'block' }} style={{
                 position: "relative",
                 top: "-0.6rem",
                 textAlign: "center",

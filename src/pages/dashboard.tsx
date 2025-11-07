@@ -17,6 +17,7 @@ import Teams from "../props/dashboard/teams.json";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
 import AppealTimer from '../props/dashboard/appealTimer';
+import TextHint from "@/props/dashboard/TextHint";
 
 
 export default function Dashboard(props: any) {
@@ -628,7 +629,7 @@ export default function Dashboard(props: any) {
             return;
         }
 
-        historyYArray.push([{ action: `RED Warehouse + ${value}`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "RED" }])
+        historyYArray.push([{ action: `RED Warehouse = ${value}`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "RED" }])
         itemsYMap.set("redStorageZone", value);
     }
 
@@ -645,7 +646,7 @@ export default function Dashboard(props: any) {
             return;
         }
 
-        historyYArray.push([{ action: `BLUE Warehouse + ${value}`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "BLUE" }])
+        historyYArray.push([{ action: `BLUE Warehouse = ${value}`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "BLUE" }])
         itemsYMap.set("blueStorageZone", value);
     }
 
@@ -662,7 +663,7 @@ export default function Dashboard(props: any) {
             return;
         }
 
-        historyYArray.push([{ action: `GREEN Warehouse + ${value}`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "GREEN" }])
+        historyYArray.push([{ action: `GREEN Warehouse = ${value}`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "GREEN" }])
         itemsYMap.set("greenStorageZone", value);
     }
 
@@ -679,7 +680,7 @@ export default function Dashboard(props: any) {
             return;
         }
 
-        historyYArray.push([{ action: `YELLOW Warehouse + ${value}`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "YELLOW" }])
+        historyYArray.push([{ action: `YELLOW Warehouse = ${value}`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "YELLOW" }])
         itemsYMap.set("yellowStorageZone", value);
     }
 
@@ -763,7 +764,7 @@ export default function Dashboard(props: any) {
     return (
         <>
             <Head>
-                <title>{"HKUST Robocon 2024"}</title>
+                <title>{"HKUST RDC 2025"}</title>
             </Head>
             <Box style={{
                 height: containerHeight,
@@ -799,13 +800,13 @@ export default function Dashboard(props: any) {
                             {gameID}
                         </Text>
                     </Flex>
-                    <Flex>
+                    <Flex display={{ base: 'none', md: 'flex' }}>
                         <Button onClick={() => { navigator.clipboard.writeText(gameID).then(() => toast({ title: "GameID Copied!", status: "success", duration: 1000 })) }} colorScheme="blue" size={"sm"}>Copy GameID</Button>
                     </Flex>
-                    <Flex>
+                    <Flex display={{ base: 'none', md: 'flex' }}>
                         <Button onClick={() => { navigator.clipboard.writeText(JSON.stringify(gameProps.toJSON())).then(() => toast({ title: "GameProps Copied!", status: "success", duration: 1000 })) }} colorScheme="blue" size={"sm"}>Copy Game Props</Button>
                     </Flex>
-                    <Flex>
+                    <Flex display={{ base: 'none', md: 'flex' }}>
                         <Button onClick={() => { forceReset(); toast.closeAll(); toast({ title: "Props Reset!", status: "success", duration: 1000 }) }} colorScheme="red" size={"sm"}>Force Reset</Button>
                     </Flex>
                 </Box>
@@ -818,7 +819,7 @@ export default function Dashboard(props: any) {
                     {onlineStatus == 1 ? "Connected" : onlineStatus == 0 ? "Disconnected" : "Large Time Diff"} <FontAwesomeIcon icon={faCircleDot} />
                     <br />
                 </Box>
-                <Box style={{
+                <Box display={{ base: 'none', md: 'block' }} style={{
                     right: "1rem",
                     top: "2.5rem",
                     zIndex: 10,
@@ -855,8 +856,79 @@ export default function Dashboard(props: any) {
                     top: '25%',
                     position: 'absolute',
                 }}>
+                    {/* Mobile: Vertical Layout for ScoreDisplay with Counters */}
+                    <Box display={{ base: 'flex', md: 'none' }} flexDirection="column" alignItems="center" gap="1.5rem" style={{
+                        position: 'absolute',
+                        top: '5%',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 10,
+                        width: '90%',
+                    }}>
+                        {/* Red Team */}
+                        <Box display="flex" flexDirection="column" alignItems="center" gap="0.5rem" width="100%">
+                            <ScoreDisplay color={"red"} team={teamState.redTeam} editable={true} score={scores.redPoints} teams={Teams} setTeam={updateTeam} teamColor={"redTeam"} />
+                            <Box display="flex" gap="1rem" justifyContent="center" width="100%">
+                                <Box display="flex" flexDirection="column" alignItems="center" gap="0.25rem">
+                                    <TextHint text="StartZone + First Block" />
+                                    <Counter counter={itemsState.redStartZone} setCounter={startZoneAction} color={"red"} />
+                                </Box>
+                                <Box display="flex" flexDirection="column" alignItems="center" gap="0.25rem">
+                                    <TextHint text="Warehouse" />
+                                    <CounterType counter={itemsState.redStorageZone} setCounter={redStorageZoneAction} color={"red"} />
+                                </Box>
+                            </Box>
+                        </Box>
+
+                        {/* Green Team */}
+                        <Box display="flex" flexDirection="column" alignItems="center" gap="0.5rem" width="100%">
+                            <ScoreDisplay color={"green"} team={teamState.greenTeam} editable={true} score={scores.greenPoints} teams={Teams} setTeam={updateTeam} teamColor={"greenTeam"} />
+                            <Box display="flex" gap="1rem" justifyContent="center" width="100%">
+                                <Box display="flex" flexDirection="column" alignItems="center" gap="0.25rem">
+                                    <TextHint text="StartZone + First Block" />
+                                    <Counter counter={itemsState.greenStartZone} setCounter={startZoneAction} color={"green"} />
+                                </Box>
+                                <Box display="flex" flexDirection="column" alignItems="center" gap="0.25rem">
+                                    <TextHint text="Warehouse" />
+                                    <CounterType counter={itemsState.greenStorageZone} setCounter={greenStorageZoneAction} color={"green"} />
+                                </Box>
+                            </Box>
+                        </Box>
+
+                        {/* Yellow Team */}
+                        <Box display="flex" flexDirection="column" alignItems="center" gap="0.5rem" width="100%">
+                            <ScoreDisplay color={"yellow"} team={teamState.yellowTeam} editable={true} score={scores.yellowPoints} teams={Teams} setTeam={updateTeam} teamColor={"yellowTeam"} />
+                            <Box display="flex" gap="1rem" justifyContent="center" width="100%">
+                                <Box display="flex" flexDirection="column" alignItems="center" gap="0.25rem">
+                                    <TextHint text="StartZone + First Block" />
+                                    <Counter counter={itemsState.yellowStartZone} setCounter={startZoneAction} color={"yellow"} />
+                                </Box>
+                                <Box display="flex" flexDirection="column" alignItems="center" gap="0.25rem">
+                                    <TextHint text="Warehouse" />
+                                    <CounterType counter={itemsState.yellowStorageZone} setCounter={yellowStorageZoneAction} color={"yellow"} />
+                                </Box>
+                            </Box>
+                        </Box>
+
+                        {/* Blue Team */}
+                        <Box display="flex" flexDirection="column" alignItems="center" gap="0.5rem" width="100%">
+                            <ScoreDisplay color={"blue"} team={teamState.blueTeam} editable={true} score={scores.bluePoints} teams={Teams} setTeam={updateTeam} teamColor={"blueTeam"} />
+                            <Box display="flex" gap="1rem" justifyContent="center" width="100%">
+                                <Box display="flex" flexDirection="column" alignItems="center" gap="0.25rem">
+                                    <TextHint text="StartZone/First Block" />
+                                    <Counter counter={itemsState.blueStartZone} setCounter={startZoneAction} color={"blue"} />
+                                </Box>
+                                <Box display="flex" flexDirection="column" alignItems="center" gap="0.25rem">
+                                    <TextHint text="Warehouse" />
+                                    <CounterType counter={itemsState.blueStorageZone} setCounter={blueStorageZoneAction} color={"blue"} />
+                                </Box>
+                            </Box>
+                        </Box>
+                    </Box>
+
+                    {/* Desktop: Original Layout for ScoreDisplay */}
                     {/* Red Team Score - Top Left */}
-                    <Box style={{
+                    <Box display={{ base: 'none', md: 'block' }} style={{
                         left: '8%',
                         top: '-15%',
                         position: 'absolute',
@@ -866,7 +938,7 @@ export default function Dashboard(props: any) {
                     </Box>
 
                     {/* Green Team Score - Top Right */}
-                    <Box style={{
+                    <Box display={{ base: 'none', md: 'block' }} style={{
                         right: '8%',
                         top: '-15%',
                         position: 'absolute',
@@ -876,7 +948,7 @@ export default function Dashboard(props: any) {
                     </Box>
 
                     {/* Yellow Team Score - Bottom Left */}
-                    <Box style={{
+                    <Box display={{ base: 'none', md: 'block' }} style={{
                         left: '8%',
                         top: '43%',
                         position: 'absolute',
@@ -886,7 +958,7 @@ export default function Dashboard(props: any) {
                     </Box>
 
                     {/* Blue Team Score - Bottom Right */}
-                    <Box style={{
+                    <Box display={{ base: 'none', md: 'block' }} style={{
                         right: '8%',
                         top: '43%',
                         position: 'absolute',
@@ -897,7 +969,7 @@ export default function Dashboard(props: any) {
 
 
                     {/* Red Team History - Top Left */}
-                    <Box style={{
+                    <Box display={{ base: 'none', md: 'block' }} style={{
                         left: '8%',
                         top: '15%',
                         position: 'absolute',
@@ -907,7 +979,7 @@ export default function Dashboard(props: any) {
                     </Box>
 
                     {/* Green Team History - Top Right */}
-                    <Box style={{
+                    <Box display={{ base: 'none', md: 'block' }} style={{
                         right: '8%',
                         top: '15%',
                         position: 'absolute',
@@ -917,7 +989,7 @@ export default function Dashboard(props: any) {
                     </Box>
 
                     {/* Yellow Team History - Bottom Left */}
-                    <Box style={{
+                    <Box display={{ base: 'none', md: 'block' }} style={{
                         left: '8%',
                         top: '73%',
                         position: 'absolute',
@@ -927,8 +999,8 @@ export default function Dashboard(props: any) {
                     </Box>
 
                     {/* Blue Team History - Bottom Right */}
-                    <Box style={{
-                        right: '7%',
+                    <Box display={{ base: 'none', md: 'block' }} style={{
+                        right: '5%',
                         top: '73%',
                         width: '20%',
                         position: 'absolute',
@@ -945,35 +1017,43 @@ export default function Dashboard(props: any) {
                             height: '100%',
                             width: '100%',
                             objectFit: 'contain',
+                        }} sx={{
+                            transform: { base: 'scale(3)', md: 'scale(1)' },
+                            transformOrigin: 'center',
+                            backgroundColor: 'black'
                         }} />
                     </Box>
 
-                    <Box style={{
-                        left: '36.3%',
+                    {/* Desktop: CounterType - Red Storage Zone */}
+                    <Box display={{ base: 'none', md: 'block' }} style={{
+                        left: '37.8%',
                         top: '17.8%',
                         position: 'absolute',
                         zIndex: 10,
                     }}>
                         <CounterType counter={itemsState.redStorageZone} setCounter={redStorageZoneAction} color={"red"} />
                     </Box>
-                    <Box style={{
-                        left: '61.5%',
+                    {/* Desktop: CounterType - Blue Storage Zone */}
+                    <Box display={{ base: 'none', md: 'block' }} style={{
+                        right: '37.8%',
                         top: '72%',
                         position: 'absolute',
                         zIndex: 10,
                     }}>
                         <CounterType counter={itemsState.blueStorageZone} setCounter={blueStorageZoneAction} color={"blue"} />
                     </Box>
-                    <Box style={{
-                        left: '61.5%',
+                    {/* Desktop: CounterType - Green Storage Zone */}
+                    <Box display={{ base: 'none', md: 'block' }} style={{
+                        right: '37.8%',
                         top: '17.8%',
                         position: 'absolute',
                         zIndex: 10,
                     }}>
                         <CounterType counter={itemsState.greenStorageZone} setCounter={greenStorageZoneAction} color={"green"} />
                     </Box>
-                    <Box style={{
-                        left: '36.3%',
+                    {/* Desktop: CounterType - Yellow Storage Zone */}
+                    <Box display={{ base: 'none', md: 'block' }} style={{
+                        left: '37.8%',
                         top: '72%',
                         position: 'absolute',
                         zIndex: 10,
@@ -981,17 +1061,18 @@ export default function Dashboard(props: any) {
                         <CounterType counter={itemsState.yellowStorageZone} setCounter={yellowStorageZoneAction} color={"yellow"} />
                     </Box>
 
-
-                    <Box style={{
-                        left: '29.3%',
+                    {/* Desktop: Counter - Red Start Zone */}
+                    <Box display={{ base: 'none', md: 'block' }} style={{
+                        left: '31.8%',
                         top: '3%',
                         position: 'absolute',
                         zIndex: 10,
                     }}>
                         <Counter counter={itemsState.redStartZone} setCounter={startZoneAction} color={"red"} />
                     </Box>
-                    <Box style={{
-                        right: '29.5%',
+                    {/* Desktop: Counter - Blue Start Zone */}
+                    <Box display={{ base: 'none', md: 'block' }} style={{
+                        right: '31.8%',
                         top: '86.5%',
                         position: 'absolute',
                         zIndex: 10,
@@ -1002,9 +1083,10 @@ export default function Dashboard(props: any) {
                             color={"blue"}
                         />
                     </Box>
-                    <Box style={{
+                    {/* Desktop: Counter - Green Start Zone */}
+                    <Box display={{ base: 'none', md: 'block' }} style={{
                         top: '3.2%',
-                        left: '68.2%',
+                        right: '31.8%',
                         position: 'absolute',
                         zIndex: 10,
                     }}>
@@ -1014,8 +1096,9 @@ export default function Dashboard(props: any) {
                             color={"green"}
                         />
                     </Box>
-                    <Box style={{
-                        left: '29.5%',
+                    {/* Desktop: Counter - Yellow Start Zone */}
+                    <Box display={{ base: 'none', md: 'block' }} style={{
+                        left: '31.8%',
                         top: '86.5%',
                         position: 'absolute',
                         zIndex: 10,
