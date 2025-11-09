@@ -92,10 +92,13 @@ export default function Dashboard(props: any) {
     const [countdownBeep, setCountdownBeep] = useState<any>(null);
     const [countdownBeep10, setCountdownBeep10] = useState<any>(null);
     const [bgm, setBGM] = useState<any>(null);
+    const [timeNotify, setTimeNotify] = useState<any>(null);
+    const timeNotifyPlayed = useRef(false);
     useEffect(() => {
         setCountdownBeep(new Audio("/sound/countdown.mp3"));
         setCountdownBeep10(new Audio("/sound/countdown10.mp3"));
         setBGM(new Audio("/sound/bgm.mp3"));
+        setTimeNotify(new Audio("/sound/time_notify.mp3"));
     }, [])
 
     const soundCheck = (stage: string, remainingTime: number) => {
@@ -114,6 +117,16 @@ export default function Dashboard(props: any) {
                     bgm.volume = 0.7;
                     countdownBeep10.play();
                 }
+                // Reset the flag when remaining time is outside the notification range
+                if (remainingTime > 160000 || remainingTime <= 15000) {
+                    timeNotifyPlayed.current = false;
+                }
+                // Play notification only once when entering the range
+                if (remainingTime <= 160000 && remainingTime > 15000 && timeNotify && timeNotify.paused && !timeNotifyPlayed.current) {
+                    console.log("Time Notify Playing")
+                    timeNotify.play();
+                    timeNotifyPlayed.current = true;
+                }
                 break;
             case "END":
                 if (bgm && !bgm.paused) {
@@ -128,6 +141,8 @@ export default function Dashboard(props: any) {
         //countdownBeep && countdownBeep.pause(); // Ignore countdownBeep to passthough last second beep
         countdownBeep10 && countdownBeep10.pause();
         bgm && bgm.pause();
+        timeNotify && timeNotify.pause();
+        timeNotifyPlayed.current = false;
     }
 
     const forceStopSound = () => {
@@ -142,6 +157,11 @@ export default function Dashboard(props: any) {
         if (bgm && !bgm.paused) {
             bgm.pause();
             bgm.currentTime = 0;
+        }
+        if (timeNotify && !timeNotify.paused) {
+            timeNotify.pause();
+            timeNotify.currentTime = 0;
+            timeNotifyPlayed.current = false;
         }
     }
 
@@ -257,6 +277,7 @@ export default function Dashboard(props: any) {
                 if (newGameStage == "GAME") {
                     stopClock();
                     resetStage();
+                    timeNotifyPlayed.current = false;
                 }
             }
         }
@@ -491,51 +512,6 @@ export default function Dashboard(props: any) {
             greateVictoryRef.current = true;
             stopClock();
         }
-
-
-        // if (redOccoupiedSilos >= 3) {
-        //     let greatVictoryTimestamp = (GAME_STAGES_TIME[GAME_STAGES.indexOf(clockData.get("stage") as string)] * 1000) - (clockData.get("elapsed") as number) - (Date.now() - (clockData.get("timestamp") as number));
-        //     const elapsedTime = (clockData.get("elapsed") as number) + (Date.now() - (clockData.get("timestamp") as number));
-        //     const elapsedMinutes = Math.floor(elapsedTime / 60000) + "";
-        //     const elapsedSeconds = Math.floor(elapsedTime / 1000 % 60) + "";
-        //     const elapsedMilliseconds = elapsedTime % 1000 + "";
-        //     const elapsedText = {
-        //         minutes: elapsedMinutes.length < 2 ? "0" + elapsedMinutes : elapsedMinutes,
-        //         seconds: elapsedSeconds.length < 2 ? "0" + elapsedSeconds : elapsedSeconds,
-        //         milliseconds: elapsedMilliseconds.length < 3 ? elapsedMilliseconds.length < 2 ? "00" + elapsedMilliseconds : "0" + elapsedMilliseconds : elapsedMilliseconds
-        //     }
-        //     toast({
-        //         title: "RED GREAT VICTORY",
-        //         status: 'success',
-        //         position: 'bottom-left',
-        //         duration: 5000,
-        //     })
-        //     greateVictoryRef.current = true;
-        //     if (historyYArray.get(historyYArray.length - 1)?.action !== `RED Great Victory`) historyYArray.push([{ action: `RED Great Victory`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "RED" }]);
-        //     greatVictoryObject = { redGreatVictory: true, blueGreatVictory: false, greenGreatVictory: false, yellowGreatVictory: false, greatVictoryTimestamp }
-        //     stopClock();
-        // } else if (blueOccoupiedSilos >= 3) {
-        //     let greatVictoryTimestamp = (GAME_STAGES_TIME[GAME_STAGES.indexOf(clockData.get("stage") as string)] * 1000) - (clockData.get("elapsed") as number) - (Date.now() - (clockData.get("timestamp") as number));
-        //     const elapsedTime = (clockData.get("elapsed") as number) + (Date.now() - (clockData.get("timestamp") as number));
-        //     const elapsedMinutes = Math.floor(elapsedTime / 60000) + "";
-        //     const elapsedSeconds = Math.floor(elapsedTime / 1000 % 60) + "";
-        //     const elapsedMilliseconds = elapsedTime % 1000 + "";
-        //     const elapsedText = {
-        //         minutes: elapsedMinutes.length < 2 ? "0" + elapsedMinutes : elapsedMinutes,
-        //         seconds: elapsedSeconds.length < 2 ? "0" + elapsedSeconds : elapsedSeconds,
-        //         milliseconds: elapsedMilliseconds.length < 3 ? elapsedMilliseconds.length < 2 ? "00" + elapsedMilliseconds : "0" + elapsedMilliseconds : elapsedMilliseconds
-        //     }
-        //     toast({
-        //         title: "BLUE GREAT VICTORY",
-        //         status: 'success',
-        //         position: 'bottom-right',
-        //         duration: 5000,
-        //     })
-        //     greateVictoryRef.current = true;
-        //     if (historyYArray.get(historyYArray.length - 1)?.action !== `BLUE Great Victory`) historyYArray.push([{ action: `BLUE Great Victory`, time: elapsedText.minutes + ":" + elapsedText.seconds + "." + elapsedText.milliseconds, team: "BLUE" }])
-        //     greatVictoryObject = { redGreatVictory: true, blueGreatVictory: true, greenGreatVictory: false, yellowGreatVictory: false, greatVictoryTimestamp }
-        //     stopClock();
-        // }
 
         setScores({ redPoints, bluePoints, yellowPoints, greenPoints });
         return { redPoints, bluePoints, yellowPoints, greenPoints, ...greatVictoryObject }

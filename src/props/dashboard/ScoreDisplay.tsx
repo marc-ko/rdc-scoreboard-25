@@ -81,7 +81,7 @@ function TeamDropDownList(props: any) {
                 : {}
             }
           >
-            {item?.ename}
+            {index + 1}. {item?.ename}
           </ListItem>
         ))}
       </List>
