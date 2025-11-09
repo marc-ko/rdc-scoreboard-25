@@ -48,10 +48,12 @@ export default function Dashboard(props: any) {
     const [gameID, setGameID] = useState("");
     const [gameIDModal, setGameIDModal] = useState(true);
     const gameIDInput = useRef<HTMLInputElement>(null);
+    const [gameIDInputValue, setGameIDInputValue] = useState("");
     const [ydoc, setYDoc] = useState<Y.Doc>(new Y.Doc());
     const [onlineStatus, setOnlineStatus] = useState(0);
 
     const submitGameID = (gameID?: string) => {
+        gameID = gameID?.trim() || "YOU_JUST_ENTERED_A_FUCKING_SPACE";
         if (gameID) {
             const yJsClient = new YJsClient(gameID);
             setGameID(gameID);
@@ -773,11 +775,26 @@ export default function Dashboard(props: any) {
                 }}>
                     <Flex >
                         <Text mr="0.3rem" userSelect="none">{"GameID:"}</Text>
+                        {/*Laptop: Show GameID*/}
                         <Text
                             cursor="pointer"
                             textShadow="0 0 10px white"
+                            display={{ base: 'none', md: 'block' }}
                             color="transparent"
                             _hover={{ textShadow: "none", color: "white" }}
+                            onClick={() => {
+                                navigator.clipboard.writeText(gameID).then(() =>
+                                    toast({ title: "GameID Copied!", status: "success", duration: 1000 })
+                                );
+                            }}
+                        >
+                            {gameID}
+                        </Text>
+                        {/*Mobile: Show GameID*/}
+                        <Text
+                            cursor="pointer"
+                            display={{ base: 'block', md: 'none' }}
+                            color="white"
                             onClick={() => {
                                 navigator.clipboard.writeText(gameID).then(() =>
                                     toast({ title: "GameID Copied!", status: "success", duration: 1000 })
@@ -1120,16 +1137,23 @@ export default function Dashboard(props: any) {
                 <ModalContent>
                     <ModalHeader>Connect to Game Room</ModalHeader>
                     <ModalBody>
-                        <Input placeholder="Game ID" ref={gameIDInput} />
+                        <Input
+                            placeholder="Game ID"
+                            ref={gameIDInput}
+                            value={gameIDInputValue}
+                            onChange={(e) => setGameIDInputValue(e.target.value)}
+                        />
                     </ModalBody>
 
                     <ModalFooter>
                         <Button colorScheme='blue' mr={3} onClick={() => submitGameID(gameIDInput.current?.value)}>
                             Submit
                         </Button>
-                        <Button colorScheme='green' mr={3} onClick={() => submitGameID(String(Math.floor(10000000 + Math.random() * 90000000)))}>
-                            Create Game
-                        </Button>
+                        {!gameIDInputValue && (
+                            <Button colorScheme='green' mr={3} onClick={() => submitGameID(String(Math.floor(10000000 + Math.random() * 90000000)))}>
+                                Create Game
+                            </Button>
+                        )}
                     </ModalFooter>
                 </ModalContent>
             </Modal>
